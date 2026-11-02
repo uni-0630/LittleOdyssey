@@ -299,6 +299,23 @@ void ALittleOdysseyCharacter::RestoreMovementSettings()
 	GetCharacterMovement()->MaxAcceleration = mOriginalMaxAcceleration;
 }
 
+// 점프 금지 함수
+void ALittleOdysseyCharacter::JumpDisable()
+{
+	// 점프 금지 상태로 변경
+	mJumpBlocked = true;
+
+	// 기존에 점프 버튼을 누르고 있었다면 입력 상태도 해제
+	StopJumping();
+}
+
+// 점프 가능 함수
+void ALittleOdysseyCharacter::JumpEnable()
+{
+	// 점프 금지 해제
+	mJumpBlocked = false;
+}
+
 void ALittleOdysseyCharacter::OnJumped_Implementation()
 {
 	// 부모 클래스의 기본 점프 처리
@@ -364,6 +381,12 @@ void ALittleOdysseyCharacter::OnWalkingOffLedge_Implementation(
 // 기본 점프 조건에 코요테 타임 조건 추가
 bool ALittleOdysseyCharacter::CanJumpInternal_Implementation() const
 {
+	// 점프 금지 구역에 있다면 점프 불가능
+	if (mJumpBlocked)
+	{
+		return false;
+	}
+	
 	// 언리얼 기본 점프 가능 여부 확인
 	const bool bCanJump = Super::CanJumpInternal_Implementation();
 

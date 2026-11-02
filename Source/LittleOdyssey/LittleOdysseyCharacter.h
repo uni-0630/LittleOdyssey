@@ -104,6 +104,9 @@ private:
 	// 캐릭터의 원래 가속도 저장
 	float mOriginalMaxAcceleration = 0.f;
 
+	// 현재 점프가 금지된 상태인지 저장
+	bool mJumpBlocked = false;
+
 public:
 
 	/** Handles move inputs from either controls or UI interfaces */
@@ -161,6 +164,12 @@ public:
 
 	// 일반 바닥의 이동 설정으로 복구
 	void RestoreMovementSettings();
+
+	// 점프 금지 함수
+	void JumpDisable();
+
+	// 점프 가능 함수
+	void JumpEnable();
 
 protected:
 	// 캐릭터가 실제로 점프했을 때 호출되는 함수
