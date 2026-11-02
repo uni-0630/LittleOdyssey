@@ -11,6 +11,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
 #include "LittleOdyssey.h"
+#include "Kismet/GameplayStatics.h"
 
 ALittleOdysseyCharacter::ALittleOdysseyCharacter()
 {
@@ -320,6 +321,17 @@ void ALittleOdysseyCharacter::OnJumped_Implementation()
 {
 	// 부모 클래스의 기본 점프 처리
 	Super::OnJumped_Implementation();
+
+	// 점프 효과음이 설정되어 있다면 재생
+	if (mJumpSound)
+	{
+		// 캐릭터 위치에서 점프 효과음 재생
+		UGameplayStatics::PlaySoundAtLocation(
+			this,
+			mJumpSound,
+			GetActorLocation()
+		);
+	}
 
 	// 점프가 성공했을 때 현재 점프 횟수와 최대 허용 횟수 확인
 	UE_LOG(LogTemp, Warning,

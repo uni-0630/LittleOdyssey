@@ -10,6 +10,7 @@
 class USpringArmComponent;
 class UCameraComponent;
 class UInputAction;
+class USoundBase;
 struct FInputActionValue;
 
 DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
@@ -81,6 +82,10 @@ protected:
 
 	// 플레이어가 현재 도달한 가장 높은 체크포인트 번호
 	int32 mCurrentCheckpointIndex = 0;
+	
+	// 점프할 때 재생할 효과음
+	UPROPERTY(EditAnywhere, Category = "Sound")
+	TObjectPtr<USoundBase> mJumpSound = nullptr;
 
 private:
 	// 일반 점프를 했는지 구분하기 위한 변수
