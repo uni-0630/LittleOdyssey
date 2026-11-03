@@ -8,6 +8,7 @@
 
 class UBoxComponent;
 class UStaticMeshComponent;
+class USoundBase;
 
 UCLASS()
 class LITTLEODYSSEY_API ACheckpoint : public AActor
@@ -24,6 +25,10 @@ private:
 
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	UStaticMeshComponent* mBoxMesh;
+
+	// 체크포인트 활성화 효과음
+	UPROPERTY(EditAnywhere, Category = "Sound")
+	TObjectPtr<USoundBase> mCheckpointSound = nullptr;
 
 	UFUNCTION()
 	void OnBeginOverlap(
@@ -46,6 +51,10 @@ private:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;	
+
+	// 체크포인트가 활성화되었을 때 블루프린트에서 실행할 이벤트
+	UFUNCTION(BlueprintImplementableEvent, Category = "Checkpoint")
+	void OnCheckpointActivated();
 
 public:	
 	// Called every frame

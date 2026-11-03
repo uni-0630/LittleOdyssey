@@ -6,6 +6,9 @@
 #include "Components/StaticMeshComponent.h"
 #include "LittleOdysseyCharacter.h"
 #include "TimerManager.h"
+#include "Kismet/GameplayStatics.h"
+#include "NiagaraFunctionLibrary.h"
+#include "NiagaraSystem.h"
 
 // Sets default values
 ADoubleJumpItem::ADoubleJumpItem()
@@ -52,6 +55,17 @@ void ADoubleJumpItem::OnBeginOverlap(
 	// Overlap 이벤트가 정상적으로 호출되었는지 로그로 확인
 	UE_LOG(LogTemp, Warning, TEXT("Double Jump Item Get!"));
 
+	// 아이템 획득 효과음이 설정되어 있다면 재생
+	if (mGetDoubleJumpItemSound)
+	{
+		// 아이템 획득 효과음 재생
+		UGameplayStatics::PlaySoundAtLocation(
+			this,
+			mGetDoubleJumpItemSound,
+			GetActorLocation()
+		);
+	}
+
 	// OtherActor를 ALittleOdysseyCharacter 타입으로 변환 시도
 	ALittleOdysseyCharacter* Player =
 		Cast<ALittleOdysseyCharacter>(OtherActor);
@@ -60,6 +74,17 @@ void ADoubleJumpItem::OnBeginOverlap(
 	if (!IsValid(Player))
 	{
 		return;
+	}
+
+	// 나이아가라 이펙트가 설정되어 있다면 재생
+	if (mPickupEffect)
+	{
+		// 플레이어의 현재 위치에서 이펙트 생성
+		UNiagaraFunctionLibrary::SpawnSystemAtLocation(
+			GetWorld(),
+			mPickupEffect,
+			Player->GetActorLocation()
+		);
 	}
 
 	// 점프 아이템 활성화

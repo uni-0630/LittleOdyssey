@@ -8,6 +8,9 @@
 
 class UBoxComponent;
 class UStaticMeshComponent;
+class UUserWidget;
+class APlayerController;
+class USoundBase;
 
 UCLASS()
 class LITTLEODYSSEY_API AStageGoal : public AActor
@@ -39,6 +42,19 @@ private:
 	// 에디터에서 각 StageGoal마다 다르게 설정 가능
 	UPROPERTY(EditAnywhere, Category = "Stage")
 	FName mNextLevelName;
+
+	// 마지막 스테이지인지 확인하는 변수
+	UPROPERTY(EditAnywhere, Category = "Stage")
+	bool mIsFinalStage = false;
+
+	// 마지막 스테이지 클리어 시 표시할 UI 클래스
+	// 에디터에서 WBP_Clear를 지정할 수 있음
+	UPROPERTY(EditAnywhere, Category = "Stage|UI")
+	TSubclassOf<UUserWidget> mClearWidgetClass;
+
+	// 클리어 효과음
+	UPROPERTY(EditAnywhere, Category = "Sound")
+	TObjectPtr<USoundBase> mStageGoalSound = nullptr;
 
 protected:
 	// Called when the game starts or when spawned

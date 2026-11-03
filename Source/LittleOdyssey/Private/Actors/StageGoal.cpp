@@ -6,6 +6,8 @@
 #include "Components/StaticMeshComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "LittleOdysseyCharacter.h"
+#include "Blueprint/UserWidget.h"
+#include "GameFramework/PlayerController.h"
 
 // Sets default values
 AStageGoal::AStageGoal()
@@ -56,9 +58,53 @@ void AStageGoal::OnBeginOverlap(
 	ALittleOdysseyCharacter* Player =
 		Cast<ALittleOdysseyCharacter>(OtherActor);
 
-	if (Player)
+	// 클리어 효과음이 설정되어 있다면 재생
+	if (mStageGoalSound)
 	{
-		// 에디터에서 설정한 다음 레벨로 이동
+		// 클리어 효과음 재생
+		UGameplayStatics::PlaySoundAtLocation(
+			this,
+			mStageGoalSound,
+			GetActorLocation()
+		);
+	}
+
+	if (mIsFinalStage)
+	{
+		// 클리어 UI가 설정되어 있는지 확인
+		if (mClearWidgetClass)
+		{
+			// 플레이어 컨트롤러 가져오기
+			APlayerController* PC = Cast<APlayerController>(Player->GetController());
+
+			if (PC)
+			{
+				// 지정한 클래스로 클리어 위젯 생성
+				UUserWidget* ClearWidget =
+					CreateWidget<UUserWidget>(PC, mClearWidgetClass);
+
+				if (ClearWidget)
+				{
+					// 클리어 화면 표시
+					ClearWidget->AddToViewport();
+
+					// 마우스 커서 표시
+					PC->bShowMouseCursor = true;
+
+					// 키보드 입력을 UI로 전환
+					FInputModeUIOnly InputMode;
+					InputMode.SetWidgetToFocus(ClearWidget->TakeWidget());
+					PC->SetInputMode(InputMode);
+
+					// 게임 일시정지
+					UGameplayStatics::SetGamePaused(this, true);
+				}
+			}
+		}
+	}
+	else
+	{
+		// 기존 스테이지 이동 기능 유지
 		UGameplayStatics::OpenLevel(this, mNextLevelName);
 	}
 }

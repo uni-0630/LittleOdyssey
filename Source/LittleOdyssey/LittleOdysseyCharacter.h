@@ -87,6 +87,10 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Sound")
 	TObjectPtr<USoundBase> mJumpSound = nullptr;
 
+	// 떨어졌을 때 재생할 효과음
+	UPROPERTY(EditAnywhere, Category = "Sound")
+	TObjectPtr<USoundBase> mDieSound = nullptr;
+
 private:
 	// 일반 점프를 했는지 구분하기 위한 변수
 	bool mHasJumped = false;

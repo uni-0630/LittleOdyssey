@@ -5,6 +5,7 @@
 #include "Components/BoxComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "LittleOdysseyCharacter.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 ACheckpoint::ACheckpoint()
@@ -59,10 +60,23 @@ void ACheckpoint::OnBeginOverlap(
 	{
 		if (Player->SetCheckpointIndex(mCheckpointIndex))
 		{
+			// 리스폰 위치 갱신
 			Player->SetRespawnLocation(GetActorLocation());
-			Player->SetCheckpointIndex(mCheckpointIndex);
+
+			// 클리어 효과음이 설정되어 있다면 재생
+			if (mCheckpointSound)
+			{
+				// 체크포인트 활성화 효과음 재생
+				UGameplayStatics::PlaySoundAtLocation(
+					this,
+					mCheckpointSound,
+					GetActorLocation()
+				);
+			}
 		}
 
+		// 블루프린트에 체크포인트 활성화 알림
+		OnCheckpointActivated();
 	}
 }
 

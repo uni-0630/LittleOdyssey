@@ -8,6 +8,8 @@
 
 class UBoxComponent;
 class UStaticMeshComponent;
+class USoundBase;
+class UNiagaraSystem;
 
 UCLASS()
 class LITTLEODYSSEY_API ADoubleJumpItem : public AActor
@@ -24,6 +26,14 @@ private:
 
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	UStaticMeshComponent* mBoxMesh;
+
+	// 더블점프 아이템 획득 효과음
+	UPROPERTY(EditAnywhere, Category = "Sound")
+	TObjectPtr<USoundBase> mGetDoubleJumpItemSound = nullptr;
+
+	// 아이템 획득 시 재생할 나이아가라 이펙트
+	UPROPERTY(EditAnywhere, Category = "Effect")
+	TObjectPtr<UNiagaraSystem> mPickupEffect = nullptr;
 
 	UFUNCTION()
 	void OnBeginOverlap(

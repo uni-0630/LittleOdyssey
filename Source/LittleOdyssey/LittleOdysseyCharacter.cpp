@@ -162,6 +162,17 @@ void ALittleOdysseyCharacter::Tick(float DeltaTime)
 	if (GetActorLocation().Z < mFallLimitZ)
 	{
 		Respawn();
+
+		// 점프 효과음이 설정되어 있다면 재생
+		if (mDieSound)
+		{
+			// 캐릭터 위치에서 점프 효과음 재생
+			UGameplayStatics::PlaySoundAtLocation(
+				this,
+				mDieSound,
+				GetActorLocation()
+			);
+		}
 	}
 
 	// 코요테 타임이 남아 있을 때만 감소
