@@ -6,6 +6,8 @@
 #include "Components/StaticMeshComponent.h"
 #include "LittleOdysseyCharacter.h"
 #include "Kismet/GameplayStatics.h"
+#include "NiagaraFunctionLibrary.h"
+#include "NiagaraSystem.h"
 
 // Sets default values
 ACheckpoint::ACheckpoint()
@@ -70,6 +72,17 @@ void ACheckpoint::OnBeginOverlap(
 				UGameplayStatics::PlaySoundAtLocation(
 					this,
 					mCheckpointSound,
+					GetActorLocation()
+				);
+			}
+
+			// 나이아가라 이펙트가 설정되어 있다면 재생
+			if (mPickupEffect)
+			{
+				// 플레이어의 현재 위치에서 이펙트 생성
+				UNiagaraFunctionLibrary::SpawnSystemAtLocation(
+					GetWorld(),
+					mPickupEffect,
 					GetActorLocation()
 				);
 			}

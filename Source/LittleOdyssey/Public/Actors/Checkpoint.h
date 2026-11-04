@@ -9,6 +9,7 @@
 class UBoxComponent;
 class UStaticMeshComponent;
 class USoundBase;
+class UNiagaraSystem;
 
 UCLASS()
 class LITTLEODYSSEY_API ACheckpoint : public AActor
@@ -29,6 +30,10 @@ private:
 	// 체크포인트 활성화 효과음
 	UPROPERTY(EditAnywhere, Category = "Sound")
 	TObjectPtr<USoundBase> mCheckpointSound = nullptr;
+
+	// 체크포인트 도달 시 재생할 나이아가라 이펙트
+	UPROPERTY(EditAnywhere, Category = "Effect")
+	TObjectPtr<UNiagaraSystem> mPickupEffect = nullptr;
 
 	UFUNCTION()
 	void OnBeginOverlap(

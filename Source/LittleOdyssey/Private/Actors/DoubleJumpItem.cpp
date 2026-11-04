@@ -83,7 +83,7 @@ void ADoubleJumpItem::OnBeginOverlap(
 		UNiagaraFunctionLibrary::SpawnSystemAtLocation(
 			GetWorld(),
 			mPickupEffect,
-			Player->GetActorLocation()
+			GetActorLocation()
 		);
 	}
 
